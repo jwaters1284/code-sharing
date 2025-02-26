@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Event Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    /* Reset default margins and paddings */
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    /* Map container styling */
+    #map {
+      width: 100%;
+      max-width: 600px;  /* Maximum width on larger screens */
+      height: 400px;
+      margin: 20px;      /* Top, right, bottom margins; left-aligned by default */
+      box-sizing: border-box;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #map {
+        width: calc(100% - 40px); /* Account for margins */
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // CHANGE THESE VALUES for each event:
+      var eventMarker = {
+        coords: [12.305424791089578, 76.65517910121116],  // <-- Update latitude and longitude here
+        popup: "<strong>29th March - Yoga Stops Traffick Day</strong><br>Mysore Palace"  // <-- Update marker popup text here
+      };
+
+      // Initialize the map centered at the event's coordinates with a zoom level
+      var map = L.map('map').setView(eventMarker.coords, 15);
+
+      // Add OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Custom marker icon (pink marker using inline SVG)
+      var customMarkerIcon = L.divIcon({
+        html: `<svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 22.8 12.5 41 12.5 41C12.5 41 25 22.8 25 12.5C25 5.6 19.4 0 12.5 0Z" fill="#CF1152"/>
+                 <circle cx="12.5" cy="12.5" r="5" fill="#ffffff"/>
+               </svg>`,
+        className: '',
+        iconSize: [25, 41],
+        iconAnchor: [12.5, 41],
+        popupAnchor: [0, -41]
+      });
+
+      // Add the event marker to the map
+      var marker = L.marker(eventMarker.coords, { icon: customMarkerIcon }).addTo(map);
+      marker.bindPopup(eventMarker.popup);
+    });
+  </script>
+</body>
+</html>
